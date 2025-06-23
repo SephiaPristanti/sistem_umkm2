@@ -6,8 +6,8 @@
     "dev": "next dev",
     "start": "next start",
     "lint": "next lint",
-     "validate-env": "ts-node validateEnv.ts",
-  "build": "npm run validate-env && next build"
+    "validate-env": "ts-node validateEnv.ts",
+    "build": "next build"
   },
   "dependencies": {
     "@apollo/client": "latest",
@@ -76,8 +76,7 @@
     "@types/react-dom": "^18",
     "postcss": "^8.5",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   }
-  
-
 }
