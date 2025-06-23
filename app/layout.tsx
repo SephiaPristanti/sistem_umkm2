@@ -8,6 +8,7 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
   title: "Si-UMKM - Sistem Informasi UMKM",
+   metadataBase: new URL("https://projectsiumkm.vercel.app"),
   description: "Platform digital untuk UMKM",
     generator: 'v0.dev'
 }
