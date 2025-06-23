@@ -1,15 +1,11 @@
-{
-  "name": "my-v0-project",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "start": "next start",
-    "lint": "next lint",
-   
-    "validate-env": "node validateEnv.js",
+"scripts": {
+  "dev": "next dev",
+  "start": "next start",
+  "lint": "next lint",
+  "validate-env": "node validateEnv.js",
   "build": "npm run validate-env && next build"
-  },
+}
+
   "dependencies": {
     "@apollo/client": "latest",
     "@apollo/server": "latest",
