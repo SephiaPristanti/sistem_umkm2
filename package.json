@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    
     "@apollo/client": "latest",
     "@apollo/server": "latest",
     "@as-integrations/next": "latest",

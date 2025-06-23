@@ -14,9 +14,9 @@ export async function getProduct(id: string) {
       reviews: 124,
       sold: 500,
       images: [
-        "/browni.svg?height=400&width=400",
-        "/placeholder.svg?height=400&width=400",
-        "/placeholder.svg?height=400&width=400",
+        "/browni.jpg?height=400&width=400",
+        "/ras.jpg?height=400&width=400",
+        "/matcha.jpg?height=400&width=400",
       ],
       category: "Makanan",
       location: "Yogyakarta",
@@ -81,7 +81,6 @@ export async function getProduct(id: string) {
       sold: 200,
       images: [
         "/smoothie.jpg?height=400&width=400",
-        "/placeholder.svg?height=400&width=400",
       ],
       category: "Minuman",
       location: "Purwokerto",
@@ -115,7 +114,7 @@ export async function getProduct(id: string) {
       sold: 120,
       images: [
         "/batik.jpg?height=400&width=400",
-        "/placeholder.svg?height=400&width=400",
+       
       ],
       category: "Fashion",
       location: "Solo",
@@ -149,7 +148,7 @@ export async function getProduct(id: string) {
       sold: 80,
       images: [
         "/sepatu.jpg?height=400&width=400",
-        "/placeholder.svg?height=400&width=400",
+        
       ],
       category: "Fashion",
       location: "Cibaduyut",

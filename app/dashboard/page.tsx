@@ -38,57 +38,57 @@ export default function DashboardPage() {
   const products = [
     {
       id: 1,
-      name: "Keripik Singkong Original",
-      price: "Rp 15.000",
-      stock: 50,
-      sold: 125,
-      views: 450,
+      name: "Fudgy Brownies",
+      price: "Rp 120.000/box",
+      stock: 100,
+      sold: 500,
+      views: 124,
       rating: 4.8,
       reviews: 24,
       status: "Aktif",
-      image: "/placeholder.svg?height=80&width=80",
+      image: "/browni.jpg?height=80&width=80",
     },
     {
       id: 2,
-      name: "Keripik Singkong Pedas",
-      price: "Rp 16.000",
-      stock: 30,
+      name: "Fudgy Brownies Rasberi",
+      price: "Rp 140.000/box",
+      stock: 100,
       sold: 89,
-      views: 320,
+      views: 120,
       rating: 4.6,
       reviews: 18,
       status: "Aktif",
-      image: "/placeholder.svg?height=80&width=80",
+      image: "/ras.jpg?height=80&width=80",
     },
     {
       id: 3,
-      name: "Keripik Singkong Manis",
-      price: "Rp 15.500",
+      name: "Fudgy Brownies Matcha",
+      price: "Rp 130.000/box",
       stock: 0,
       sold: 67,
       views: 280,
       rating: 4.5,
       reviews: 15,
       status: "Stok Habis",
-      image: "/placeholder.svg?height=80&width=80",
+      image: "/matcha.jpg?height=80&width=80",
     },
   ]
 
   const recentReviews = [
     {
       id: 1,
-      product: "Keripik Singkong Original",
+      product: "Fudgy Brownies",
       customer: "Andi Pratama",
       rating: 5,
-      comment: "Enak banget! Gurih dan renyah, pasti beli lagi!",
+      comment: "Enak banget! Manisnya pas, pasti beli lagi!",
       date: "2 hari yang lalu",
     },
     {
       id: 2,
-      product: "Keripik Singkong Pedas",
+      product: "Fudgy Brownies Matcha",
       customer: "Maya Sari",
       rating: 4,
-      comment: "Pedasnya pas, tapi agak asin menurutku.",
+      comment: "Rasa matchanya berasa banget, tekstur browniesnya juga enak.",
       date: "3 hari yang lalu",
     },
   ]
@@ -139,7 +139,7 @@ export default function DashboardPage() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard UD. Berkah Jaya</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard Sweet Bites</h1>
           <p className="text-gray-600">Kelola produk dan pantau performa bisnis Anda</p>
         </div>
 

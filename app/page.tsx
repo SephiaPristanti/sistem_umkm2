@@ -42,14 +42,14 @@ export default function HomePage() {
     {
       title: "Pelatihan Digital Marketing",
       organizer: "Kementerian Koperasi dan UKM",
-      date: "25-27 Juni 2025",
+      date: "25-27 Juli 2025",
       participants: 50,
       status: "Pendaftaran Dibuka",
     },
     {
       title: "Workshop Manajemen Keuangan UMKM",
       organizer: "Bank Indonesia",
-      date: "22-24 Juli 2025",
+      date: "12-15 Agustus 2025",
       participants: 30,
       status: "Segera Dibuka",
     },
