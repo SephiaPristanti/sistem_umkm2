@@ -1,4 +1,4 @@
-// validateEnv.ts
+// validateEnv.js
 
 const requiredEnvVars = [
   "NEXT_PUBLIC_FIREBASE_API_KEY",
@@ -14,7 +14,7 @@ const missing = requiredEnvVars.filter((key) => !process.env[key])
 if (missing.length > 0) {
   console.error("❌ Missing required environment variables:")
   missing.forEach((key) => console.error(`- ${key}`))
-  process.exit(1) // 🔥 Gagalkan build
+  process.exit(1)
 } else {
   console.log("✅ All required env variables are present")
 }
