@@ -20,7 +20,7 @@ export interface UserProfile {
   uid: string
   email: string
   displayName: string
-  photoURL?: string
+  photoURL?: string | null
   role: "user" | "admin"
   businessName?: string
   businessType?: string
@@ -33,7 +33,6 @@ export interface UserProfile {
   updatedAt: Date
 }
 
-// 🔧 Fallback user for mock mode
 const createMockUser = (email: string, data: Partial<UserProfile>): UserCredential => {
   return {
     user: {
@@ -76,10 +75,7 @@ export const registerWithEmail = async (
 ): Promise<UserCredential> => {
   const auth = getAuthInstance()
   const db = getFirestoreInstance()
-  if (!auth || !db) {
-    console.warn("Firebase not available — mock register")
-    return createMockUser(email, userData)
-  }
+  if (!auth || !db) return createMockUser(email, userData)
 
   const userCredential = await createUserWithEmailAndPassword(auth, email, password)
   const user = userCredential.user
@@ -91,8 +87,8 @@ export const registerWithEmail = async (
   const userProfile: UserProfile = {
     uid: user.uid,
     email: user.email!,
-    displayName: user.displayName || "",
-    photoURL: user.photoURL || undefined,
+    displayName: userData.displayName || "",
+    photoURL: user.photoURL ?? null,
     role: "user",
     businessName: userData.businessName,
     businessType: userData.businessType,
@@ -111,30 +107,97 @@ export const registerWithEmail = async (
 
 export const signInWithEmail = async (email: string, password: string): Promise<UserCredential> => {
   const auth = getAuthInstance()
-  if (!auth) {
-    console.warn("Firebase not available — mock signin")
-    return createMockUser(email, { displayName: "Demo User" })
-  }
-
-  return await signInWithEmailAndPassword(auth, email, password)
+  return auth
+    ? await signInWithEmailAndPassword(auth, email, password)
+    : createMockUser(email, { displayName: "Demo User" })
 }
 
 export const signInWithGoogle = async (): Promise<UserCredential> => {
   const auth = getAuthInstance()
   const db = getFirestoreInstance()
-  const { google: googleProvider } = getProviders()
-  if (!auth || !db || !googleProvider) {
-    console.warn("Firebase or Google provider unavailable — mock login")
-    return createMockUser("user@google.com", { displayName: "Google User" })
-  }
+  const { google: provider } = getProviders()
+  if (!auth || !db) return createMockUser("user@google.com", { displayName: "Google User" })
 
-  const result = await signInWithPopup(auth, googleProvider)
+  const result = await signInWithPopup(auth, provider)
   const user = result.user
 
-  const userDoc = await getDoc(doc(db, "users", user.uid))
-  if (!userDoc.exists()) {
-    const userProfile: UserProfile = {
+  const docSnap = await getDoc(doc(db, "users", user.uid))
+  if (!docSnap.exists()) {
+    await setDoc(doc(db, "users", user.uid), {
       uid: user.uid,
       email: user.email!,
       displayName: user.displayName || "",
-      photoURL: user.photoURL || undefined
+      photoURL: user.photoURL ?? null,
+      role: "user",
+      isEmailVerified: user.emailVerified,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+  }
+
+  return result
+}
+
+export const signInWithFacebook = async (): Promise<UserCredential> => {
+  const auth = getAuthInstance()
+  const db = getFirestoreInstance()
+  const { facebook: provider } = getProviders()
+  if (!auth || !db) return createMockUser("user@facebook.com", { displayName: "Facebook User" })
+
+  const result = await signInWithPopup(auth, provider)
+  const user = result.user
+
+  const docSnap = await getDoc(doc(db, "users", user.uid))
+  if (!docSnap.exists()) {
+    await setDoc(doc(db, "users", user.uid), {
+      uid: user.uid,
+      email: user.email!,
+      displayName: user.displayName || "",
+      photoURL: user.photoURL ?? null,
+      role: "user",
+      isEmailVerified: user.emailVerified,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+  }
+
+  return result
+}
+
+export const signOutUser = async (): Promise<void> => {
+  const auth = getAuthInstance()
+  if (auth) await signOut(auth)
+}
+
+export const resetPassword = async (email: string): Promise<void> => {
+  const auth = getAuthInstance()
+  if (auth) await sendPasswordResetEmail(auth, email)
+}
+
+export const getUserProfile = async (uid: string): Promise<UserProfile | null> => {
+  const db = getFirestoreInstance()
+  if (!db) {
+    return {
+      uid,
+      email: "mock@example.com",
+      displayName: "Mock User",
+      role: "user",
+      isEmailVerified: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+  }
+
+  const docSnap = await getDoc(doc(db, "users", uid))
+  return docSnap.exists() ? (docSnap.data() as UserProfile) : null
+}
+
+export const updateUserProfile = async (uid: string, updates: Partial<UserProfile>): Promise<void> => {
+  const db = getFirestoreInstance()
+  if (db) {
+    await updateDoc(doc(db, "users", uid), {
+      ...updates,
+      updatedAt: new Date(),
+    })
+  }
+}
