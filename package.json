@@ -3,8 +3,8 @@
   "start": "next start",
   "lint": "next lint",
 
-  "validate-env-fix": "node validateEnv.js",
-  "build": "npm run validate-env-fix && next build"
+"validate-env-fix": "node validateEnv.js",
+  "build-fixed": "pnpm run validate-env-fix && next build"
 }
 
   "dependencies": {
