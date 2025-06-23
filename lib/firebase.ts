@@ -1,6 +1,9 @@
-// lib/firebase.ts
-
-import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app"
+import {
+  initializeApp,
+  getApps,
+  getApp,
+  type FirebaseApp,
+} from "firebase/app"
 import {
   getAuth,
   GoogleAuthProvider,
@@ -14,66 +17,57 @@ import {
   type Firestore,
 } from "firebase/firestore"
 
-const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN!,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID!,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET!,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID!,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
-}
+// Cek ketersediaan ENV variabel saat dipanggil, bukan saat file di-load
+const isFirebaseAvailable = () =>
+  Boolean(
+    process.env.NEXT_PUBLIC_FIREBASE_API_KEY &&
+      process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN &&
+      process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID &&
+      process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET &&
+      process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID &&
+      process.env.NEXT_PUBLIC_FIREBASE_APP_ID
+  )
 
-export const isFirebaseAvailable = Boolean(
-  firebaseConfig.apiKey &&
-  firebaseConfig.authDomain &&
-  firebaseConfig.projectId &&
-  firebaseConfig.storageBucket &&
-  firebaseConfig.messagingSenderId &&
-  firebaseConfig.appId
-)
+export const getFirebaseApp = (): FirebaseApp | null => {
+  if (!isFirebaseAvailable()) return null
 
-let app: FirebaseApp | null = null
-let auth: Auth | null = null
-let db: Firestore | null = null
-let googleProvider: GoogleAuthProvider | null = null
-let facebookProvider: FacebookAuthProvider | null = null
-
-if (isFirebaseAvailable) {
   try {
-    app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp()
-    auth = getAuth(app)
-    db = getFirestore(app)
-
-    googleProvider = new GoogleAuthProvider()
-    googleProvider.addScope("email")
-    googleProvider.addScope("profile")
-
-    facebookProvider = new FacebookAuthProvider()
-    facebookProvider.addScope("email")
-    facebookProvider.addScope("public_profile")
-
-    console.log("✅ Firebase initialized successfully")
-  } catch (error) {
-    console.warn("❌ Firebase initialization failed:", error)
-    app = null
-    auth = null
-    db = null
-    googleProvider = null
-    facebookProvider = null
+    return getApps().length === 0
+      ? initializeApp({
+          apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
+          authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN!,
+          projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID!,
+          storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET!,
+          messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID!,
+          appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
+          measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+        })
+      : getApp()
+  } catch {
+    return null
   }
-} else {
-  console.warn("⚠️ Firebase config not found, running in mock mode")
 }
 
-if (
-  typeof window !== "undefined" &&
-  window.location.hostname === "localhost" &&
-  auth &&
-  db
-) {
-  connectAuthEmulator(auth, "http://localhost:9099", { disableWarnings: true })
-  connectFirestoreEmulator(db, "localhost", 8080)
+export const getAuthInstance = (): Auth | null => {
+  const app = getFirebaseApp()
+  if (!app) return null
+  return getAuth(app)
 }
 
-export { app, auth, db, googleProvider, facebookProvider }
+export const getFirestoreInstance = (): Firestore | null => {
+  const app = getFirebaseApp()
+  if (!app) return null
+  return getFirestore(app)
+}
+
+export const getProviders = () => {
+  const google = new GoogleAuthProvider()
+  google.addScope("email")
+  google.addScope("profile")
+
+  const facebook = new FacebookAuthProvider()
+  facebook.addScope("email")
+  facebook.addScope("public_profile")
+
+  return { google, facebook }
+}

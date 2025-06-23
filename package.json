@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+     "validate-env": "ts-node validateEnv.ts",
+  "build": "npm run validate-env && next build"
   },
   "dependencies": {
     "@apollo/client": "latest",
@@ -77,4 +78,6 @@
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
   }
+  
+
 }
